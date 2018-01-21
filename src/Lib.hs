@@ -21,13 +21,13 @@ data StarWarsPerson = StarWarsPerson
 instance FromJSON StarWarsPerson
 
 type StarWarsAPI
-   = "api" :> "people" :> Capture "userid" Int :> Get '[ JSON] StarWarsPerson
+   = "people" :> Capture "userid" Int :> Get '[ JSON] StarWarsPerson
 
 apiInstance :: Proxy StarWarsAPI
 apiInstance = Proxy
 
 baseApiUrl :: BaseUrl
-baseApiUrl = BaseUrl Https "swapi.co" 443 ""
+baseApiUrl = BaseUrl Https "swapi.co" 443 "/api"
 
 getStarWarsPerson :: Int -> ClientM StarWarsPerson
 getStarWarsPerson = client apiInstance
