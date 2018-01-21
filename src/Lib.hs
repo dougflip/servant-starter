@@ -14,9 +14,6 @@ import           Network.HTTP.Client.TLS (tlsManagerSettings)
 import           Servant.API
 import           Servant.Client
 
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
-
 data StarWarsPerson = StarWarsPerson
   { name :: String
   } deriving (Show, Generic)

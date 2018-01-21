@@ -33,7 +33,7 @@ library:
       - http-client-tls
 
 executables:
-  servant-starter-exe:
+  get-person-one:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
