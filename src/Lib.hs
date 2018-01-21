@@ -29,19 +29,16 @@ type StarWarsAPI
 apiInstance :: Proxy StarWarsAPI
 apiInstance = Proxy
 
-baseApiUrl :: String -> BaseUrl
-baseApiUrl = BaseUrl Http "swapi.co" 80
+baseApiUrl :: BaseUrl
+baseApiUrl = BaseUrl Https "swapi.co" 443 ""
 
 getStarWarsPerson :: Int -> ClientM StarWarsPerson
 getStarWarsPerson = client apiInstance
 
-run :: IO ()
-run = do
+run :: Int -> IO ()
+run id = do
   manager' <- newManager tlsManagerSettings
-  res <-
-    runClientM
-      (getStarWarsPerson 1)
-      (ClientEnv manager' (BaseUrl Https "swapi.co" 443 ""))
+  res <- runClientM (getStarWarsPerson id) (ClientEnv manager' baseApiUrl)
   case res of
     Left err     -> putStrLn $ "Oh no! Error: " ++ show err
     Right person -> print person
