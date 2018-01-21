@@ -3,13 +3,14 @@
 {-# LANGUAGE TypeOperators #-}
 
 module Lib
-    ( someFunc
-    , getStarWarsPerson
+    ( module Lib -- TODO: Exporting everything to make ghci easier, be specific after things are working
     ) where
 
 import Data.Aeson
-import GHC.Generics
 import Data.Proxy
+import GHC.Generics
+import Network.HTTP.Client (newManager)
+import Network.HTTP.Client.TLS (tlsManagerSettings)
 import Servant.API
 import Servant.Client
 
@@ -26,4 +27,16 @@ type StarWarsAPI = "api" :> "people" :> Capture "userid" Int :> Get '[JSON] Star
 apiInstance :: Proxy StarWarsAPI
 apiInstance = Proxy
 
+baseApiUrl :: String -> BaseUrl
+baseApiUrl = BaseUrl Http "swapi.co" 80
+
+getStarWarsPerson :: Int -> ClientM StarWarsPerson
 getStarWarsPerson = client apiInstance
+
+run :: IO ()
+run = do
+    manager' <- newManager tlsManagerSettings
+    res <- runClientM (getStarWarsPerson 1) (ClientEnv manager' (BaseUrl Https "swapi.co" 443 ""))
+    case res of
+        Left err -> putStrLn $ "Oh no! Error: " ++ show err
+        Right person -> print person

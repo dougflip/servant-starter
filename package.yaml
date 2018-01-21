@@ -29,6 +29,8 @@ library:
       - servant
       - servant-client
       - aeson
+      - http-client
+      - http-client-tls
 
 executables:
   servant-starter-exe:
