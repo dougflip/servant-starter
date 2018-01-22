@@ -15,8 +15,12 @@ import           Network.HTTP.Client.TLS (tlsManagerSettings)
 import           Servant.API
 import           Servant.Client
 
+getInt :: String -> Int
+getInt = read
+
 data StarWarsPerson = StarWarsPerson
   { name      :: String
+  , height    :: Int
   , birthYear :: String
   } deriving (Show, Generic)
 
@@ -25,7 +29,8 @@ data StarWarsPerson = StarWarsPerson
 instance FromJSON StarWarsPerson where
   parseJSON =
     withObject "StarWarsPerson" $ \v ->
-      StarWarsPerson <$> v .: "name" <*> v .: "birth_year"
+      StarWarsPerson <$> v .: "name" <*> (getInt <$> v .: "height") <*>
+      v .: "birth_year"
 
 type StarWarsAPI
    = "people" :> Capture "userid" Int :> Get '[ JSON] StarWarsPerson
