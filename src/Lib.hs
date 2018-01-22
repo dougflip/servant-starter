@@ -1,6 +1,7 @@
-{-# LANGUAGE DataKinds     #-}
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE TypeOperators #-}
+{-# LANGUAGE DataKinds         #-}
+{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TypeOperators     #-}
 
 module Lib
   ( module Lib -- TODO: Exporting everything to make ghci easier, be specific after things are working
@@ -15,10 +16,16 @@ import           Servant.API
 import           Servant.Client
 
 data StarWarsPerson = StarWarsPerson
-  { name :: String
+  { name      :: String
+  , birthYear :: String
   } deriving (Show, Generic)
 
-instance FromJSON StarWarsPerson
+-- This works, but I wonder if there is a way to "auto" map the easy fields
+-- and specify just the ones that need a mapping...
+instance FromJSON StarWarsPerson where
+  parseJSON =
+    withObject "StarWarsPerson" $ \v ->
+      StarWarsPerson <$> v .: "name" <*> v .: "birth_year"
 
 type StarWarsAPI
    = "people" :> Capture "userid" Int :> Get '[ JSON] StarWarsPerson
