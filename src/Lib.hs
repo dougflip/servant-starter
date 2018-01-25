@@ -1,5 +1,6 @@
 {-# LANGUAGE DataKinds         #-}
 {-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeOperators     #-}
 
@@ -47,7 +48,6 @@ getStarWarsPerson = client apiInstance
 run :: Int -> IO ()
 run id = do
   manager' <- newManager tlsManagerSettings
-  res <- runClientM (getStarWarsPerson id) (ClientEnv manager' baseApiUrl)
-  case res of
-    Left err     -> putStrLn $ "Oh no! Error: " ++ show err
+  runClientM (getStarWarsPerson id) (ClientEnv manager' baseApiUrl) >>= \case
+    Left err -> putStrLn $ "Oh no! Error: " ++ show err
     Right person -> print person
