@@ -12,7 +12,9 @@ parseInt s = case reads s of
 
 main :: IO ()
 main = do
-    (Just id) <- liftM parseInt $ getLine
-    run id >>= \case
-        Left s -> print s
-        Right p -> print p
+    (liftM parseInt $ getLine) >>= \case
+        Nothing -> print "Please provide an integer ID"
+        Just id ->
+            run id >>= \case
+                Left s -> print s
+                Right p -> print p
