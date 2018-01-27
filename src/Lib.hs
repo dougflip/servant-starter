@@ -45,9 +45,9 @@ baseApiUrl = BaseUrl Https "swapi.co" 443 "/api"
 getStarWarsPerson :: Int -> ClientM StarWarsPerson
 getStarWarsPerson = client apiInstance
 
-run :: Int -> IO ()
+run :: Int -> IO (Either String StarWarsPerson)
 run id = do
   manager' <- newManager tlsManagerSettings
   runClientM (getStarWarsPerson id) (ClientEnv manager' baseApiUrl) >>= \case
-    Left err -> putStrLn $ "Oh no! Error: " ++ show err
-    Right person -> print person
+    Left err -> return (Left $ "Error Requesting ID " ++ show id ++ show err)
+    Right person -> return (Right person)
