@@ -12,6 +12,7 @@ parseInt s = case reads s of
 
 main :: IO ()
 main = do
+    print "What ID should we search?"
     (liftM parseInt $ getLine) >>= \case
         Nothing -> print "Please provide an integer ID"
         Just id ->
