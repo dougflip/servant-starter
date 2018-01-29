@@ -1,21 +1,22 @@
-{-# LANGUAGE LambdaCase        #-}
+{-# LANGUAGE LambdaCase #-}
 
 module Main where
 
+import           Control.Monad
 import           Lib
-import Control.Monad
 
 parseInt :: String -> Maybe Int
-parseInt s = case reads s of
+parseInt s =
+  case reads s of
     [(n, "")] -> Just n
-    _ -> Nothing
+    _         -> Nothing
 
 main :: IO ()
 main = do
-    print "What ID should we search?"
-    (liftM parseInt $ getLine) >>= \case
-        Nothing -> print "Please provide an integer ID"
-        Just id ->
-            run id >>= \case
-                Left s -> print s
-                Right p -> print p
+  print "What ID should we search?"
+  (liftM parseInt $ getLine) >>= \case
+    Nothing -> print "Please provide an integer ID"
+    Just id ->
+      run id >>= \case
+        Left s -> print s
+        Right p -> print p
