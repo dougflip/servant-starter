@@ -2,7 +2,6 @@
 
 module Main where
 
-import           Control.Monad
 import           Lib
 
 parseInt :: String -> Maybe Int
@@ -14,7 +13,7 @@ parseInt s =
 main :: IO ()
 main = do
   print "What ID should we search?"
-  (liftM parseInt $ getLine) >>= \case
+  (fmap parseInt $ getLine) >>= \case
     Nothing -> print "Please provide an integer ID"
     Just id ->
       run id >>= \case
