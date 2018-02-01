@@ -15,7 +15,4 @@ main = do
   print "What ID should we search?"
   (fmap parseInt $ getLine) >>= \case
     Nothing -> print "Please provide an integer ID"
-    Just id ->
-      run id >>= \case
-        Left s -> print s
-        Right p -> print p
+    Just id -> run id >>= print
